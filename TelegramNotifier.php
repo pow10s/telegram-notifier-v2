@@ -12,6 +12,8 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
+use TelegramNotifier\TelegramChain\TelegramCommandsProcessor;
+
 if (!defined('ABSPATH')) {
     //If wordpress isn't loaded load it up.
     $path = $_SERVER['DOCUMENT_ROOT'];
@@ -34,6 +36,8 @@ class TelegramNotifier
             $settingsPage = new \TelegramNotifier\TelegramMenu();
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
+
+            TelegramCommandsProcessor::run(['/help', '/start']);
         }
     }
 }
