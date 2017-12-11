@@ -28,7 +28,7 @@ abstract class TelegramCommandsParser
         }
     }
 
-    public function getSuccessor()
+    private function getSuccessor()
     {
         return $this->successor;
     }

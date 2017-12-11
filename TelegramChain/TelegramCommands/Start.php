@@ -14,6 +14,5 @@ class Start extends TelegramCommandsParser
         } else {
             parent::parse($command);
         }
-
     }
 }

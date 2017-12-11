@@ -14,6 +14,5 @@ class Help extends TelegramCommandsParser
         } else {
             parent::parse($command);
         }
-
     }
 }

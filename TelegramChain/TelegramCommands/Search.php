@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stosdima
- * Date: 11.12.17
- * Time: 19:31
- */
 
 namespace TelegramNotifier\TelegramChain\TelegramCommands;
 
