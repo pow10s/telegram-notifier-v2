@@ -9,7 +9,7 @@
 namespace TelegramNotifier\TelegramChain;
 
 
-class TelegramCommandsParser
+abstract class TelegramCommandsParser
 {
     private $successor;
 
@@ -35,7 +35,7 @@ class TelegramCommandsParser
 
     public function canHandleCommand(string $command): bool
     {
-        if ($command == '/start' || $command == '/help' ) {
+        if ($command == '/start' || $command == '/search' || $command == '/help') {
             return true;
         }
         return false;

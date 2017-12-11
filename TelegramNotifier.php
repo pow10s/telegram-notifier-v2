@@ -37,7 +37,7 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
 
-            TelegramCommandsProcessor::run(['/help', '/start']);
+            TelegramCommandsProcessor::run(['/search', '/help', '/start']);
         }
     }
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stosdima
- * Date: 11.12.17
- * Time: 19:04
- */
 
 namespace TelegramNotifier\TelegramChain\TelegramCommands;
 
@@ -16,7 +10,7 @@ class Start extends TelegramCommandsParser
     public function parse(string $command)
     {
         if ($this->canHandleCommand($command)) {
-            print('Started');
+            print('Command: start');
         } else {
             parent::parse($command);
         }
