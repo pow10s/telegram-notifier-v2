@@ -12,7 +12,7 @@ namespace TelegramNotifier\TelegramChain;
 use TelegramNotifier\TelegramChain\Commands\Help;
 use TelegramNotifier\TelegramChain\Commands\Search;
 use TelegramNotifier\TelegramChain\Commands\Start;
-use TelegramBot\Api\BotApi;
+use TelegramNotifier\TelegramChain\Commands\Stop;
 
 class CommandParserProcessor
 {
@@ -21,6 +21,7 @@ class CommandParserProcessor
         $start = new Start();
         $help = new Help($start);
         $search = new Search($help);
-        $search->parse($command);
+        $stop = new Stop($search);
+        $stop->parse($command);
     }
 }

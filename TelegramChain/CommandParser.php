@@ -18,7 +18,9 @@ abstract class CommandParser
         '/help',
         '/search',
         '/admin',
+        '/stop'
     ];
+
 
     public function __construct(CommandParser $successor = null)
     {
