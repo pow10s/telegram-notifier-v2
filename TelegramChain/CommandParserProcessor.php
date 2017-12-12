@@ -3,6 +3,7 @@
 namespace TelegramNotifier\TelegramChain;
 
 
+use TelegramNotifier\TelegramChain\Commands\Admin;
 use TelegramNotifier\TelegramChain\Commands\Help;
 use TelegramNotifier\TelegramChain\Commands\Search;
 use TelegramNotifier\TelegramChain\Commands\Start;
@@ -16,6 +17,7 @@ class CommandParserProcessor
         $help = new Help($start);
         $search = new Search($help);
         $stop = new Stop($search);
-        $stop->parse($command);
+        $admin = new Admin($stop);
+        $admin->parse($command);
     }
 }
