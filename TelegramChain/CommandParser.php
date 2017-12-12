@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stosdima
- * Date: 12.12.17
- * Time: 11:57
- */
 
 namespace TelegramNotifier\TelegramChain;
 
@@ -20,7 +14,6 @@ abstract class CommandParser
         '/admin',
         '/stop'
     ];
-
 
     public function __construct(CommandParser $successor = null)
     {
