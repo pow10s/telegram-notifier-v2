@@ -22,6 +22,7 @@ class TelegramBotFactory extends TelegramFactory
                 $long->process();
                 break;
             case parent::WEBHOOK:
+                echo 'WEBHOOK';
                 break;
         }
     }

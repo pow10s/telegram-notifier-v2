@@ -44,7 +44,7 @@ class TelegramMenu
     {
         $this->options = get_option('telegram_bot_options');
         if (isset($this->options['bot_token']) && array_key_exists('bot_token', $this->options)) {
-            if ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || !is_ssl()) {
+            if (Helper::ifNotLocalhostAndSslEnabled()) {
                 echo '<div class="notice notice-error is-dismissible">
                      <p>' . __('Warning: the WebHooks is not working while you are in a localhost environment or SSL not active.') . '</p>
                      </div>';

@@ -32,7 +32,7 @@ class Helper
      * Parse quotes list and get random quote
      * @return string $quotes
      */
-    public function get_quote()
+    public function get_quote(): string
     {
         $quotes = "Don't cry because it's over, smile because it happened. ― Dr. Seuss
         Two things are infinite: the universe and human stupidity; and I'm not sure about the universe. ― Albert Einstein
@@ -59,7 +59,7 @@ class Helper
      * @param string $postBody
      * @return string
      */
-    public function generate_telegram_post($postUrl, $postTitle, $postBody)
+    public function generate_telegram_post(string $postUrl, string $postTitle, string $postBody): string
     {
         return '<a href=' . '"' . $postUrl . '"' . '>' . $postTitle . '</a>' . strip_tags("\n" . substr("$postBody", 0,
                     400));
@@ -70,7 +70,7 @@ class Helper
      * @param int $length
      * @return string
      */
-    public function randomString($length = 8)
+    public function randomString(int $length = 8): string
     {
         $str = "";
         $characters = array_merge(range('A', 'Z'), range('a', 'z'), range('0', '9'));
@@ -80,5 +80,10 @@ class Helper
             $str .= $characters[$rand];
         }
         return $str;
+    }
+
+    public static function ifNotLocalhostAndSslEnabled():bool
+    {
+        return ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || !is_ssl()) ? true : false;
     }
 }
