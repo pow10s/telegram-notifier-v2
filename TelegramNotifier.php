@@ -12,9 +12,11 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
-use TelegramNotifier\Factory\TelegramBotFactory;
 use TelegramNotifier\Factory\TelegramFactory;
-use TelegramNotifier\TelegramChain\CommandParserProcessor;
+use TelegramNotifier\TelegramChain\CommandChain;
+use TelegramNotifier\TelegramChain\TestCommand;
+use TelegramNotifier\TelegramChain\UserCommand;
+use TelegramNotifier\Factory\TelegramBotFactory;
 
 if (!defined('ABSPATH')) {
     //If wordpress isn't loaded load it up.
@@ -38,8 +40,8 @@ class TelegramNotifier
             $settingsPage = new \TelegramNotifier\TelegramMenu();
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
-            $factory = new TelegramBotFactory();
-            $factory->initMethod(TelegramFactory::LONG_POLLING);
+            $bot = new TelegramBotFactory();
+            $bot->initMethod(TelegramFactory::LONG_POLLING);
         }
     }
 }

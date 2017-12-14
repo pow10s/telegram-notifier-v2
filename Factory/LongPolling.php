@@ -9,7 +9,7 @@
 namespace TelegramNotifier\Factory;
 
 
-use TelegramNotifier\TelegramChain\CommandParserProcessor;
+use TelegramNotifier\TelegramChain\CommandChainProcessor;
 
 class LongPolling
 {
@@ -23,7 +23,7 @@ class LongPolling
             $responce = $botApi->getUpdates($this->offset, 60);
             foreach ($responce as $data) {
                 if ($data->getMessage()) {
-                    CommandParserProcessor::runCommands($data->getMessage()->getText());
+                    CommandChainProcessor::run($data->getMessage()->getText());
                 }
                 $this->offset = $responce[count($responce) - 1]->getUpdateId() + 1;
             }

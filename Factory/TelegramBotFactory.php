@@ -9,7 +9,6 @@
 namespace TelegramNotifier\Factory;
 
 
-use TelegramNotifier\TelegramChain\CommandParserProcessor;
 use TelegramNotifier\Factory\LongPolling;
 
 class TelegramBotFactory extends TelegramFactory
