@@ -15,15 +15,15 @@ class CommandChain
 
     public function addCommand($commandName)
     {
-        $this->commands []= $commandName;
+        $this->commands [] = $commandName;
     }
 
     public function runCommand($commandName)
     {
-        foreach($this->commands as $command)
-        {
-            if ($command->onCommand($commandName))
+        foreach ($this->commands as $command) {
+            if ($command->onCommand($commandName)) {
                 return;
+            }
         }
     }
 }

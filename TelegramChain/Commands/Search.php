@@ -15,7 +15,9 @@ class Search implements TCommand
 {
     public function onCommand($name)
     {
-        if ($name != '/search') return false;
+        if ($name != '/search') {
+            return false;
+        }
         echo 'Search command';
         return true;
     }

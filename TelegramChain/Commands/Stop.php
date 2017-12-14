@@ -15,7 +15,9 @@ class Stop implements TCommand
 {
     public function onCommand($name)
     {
-        if ($name != '/stop') return false;
+        if ($name != '/stop') {
+            return false;
+        }
         echo 'Stop command';
         return true;
     }
