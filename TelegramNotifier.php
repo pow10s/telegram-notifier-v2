@@ -38,8 +38,8 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $pollManager = new PollingManager();
+            $pollManager->getPolling(PollingManager::LONG_POLLING)->process();
         }
     }
 }
-
 $plugin = new TelegramNotifier();

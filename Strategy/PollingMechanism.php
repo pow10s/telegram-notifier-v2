@@ -9,7 +9,7 @@
 namespace TelegramNotifier\Strategy;
 
 
-interface PollingMechanizm
+interface PollingMechanism
 {
     function process();
 }

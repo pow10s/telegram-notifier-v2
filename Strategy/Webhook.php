@@ -9,7 +9,7 @@
 namespace TelegramNotifier\Strategy;
 
 
-class Webhook implements PollingMechanizm
+class Webhook implements PollingMechanism
 {
     public function process()
     {
