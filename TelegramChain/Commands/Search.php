@@ -15,12 +15,22 @@ class Search extends Command
 {
     protected $name = 'search';
 
-    protected $description = 'some search text';
+    protected $description = 'Search by: ';
 
     public function handle($closure)
     {
+        $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+            [
+                [
+                    ['text' => 'Categories', 'callback_data' => 'categories'],
+                    ['text' => 'Keyword', 'callback_data' => 'search-keyword'],
+                ]
+            ]
+        );
         if ($closure()->getMessage()->getText() == '/search') {
-            $this->api->sendMessage($closure()->getMessage()->getChat()->getId(), 'TEST!!!!!!!');
+            $chatId = $closure()->getMessage()->getChat()->getId();
+            TelegramDb::updateStatus($chatId, 'search-keyword');
+            $this->api->sendMessage($chatId, $this->getDecription(), 'html', false, null, $keyboard);
         }
     }
 

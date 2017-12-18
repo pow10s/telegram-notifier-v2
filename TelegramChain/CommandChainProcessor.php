@@ -9,9 +9,11 @@
 namespace TelegramNotifier\TelegramChain;
 
 
+use TelegramNotifier\TelegramChain\Commands\Admin;
 use TelegramNotifier\TelegramChain\Commands\Help;
 use TelegramNotifier\TelegramChain\Commands\Search;
 use TelegramNotifier\TelegramChain\Commands\Start;
+use TelegramNotifier\TelegramChain\Commands\Stop;
 
 class CommandChainProcessor
 {
@@ -21,7 +23,9 @@ class CommandChainProcessor
         $cc->addCommands([
             new Search(),
             new Start(),
-            new Help()
+            new Help(),
+            new Admin(),
+            new Stop()
         ]);
         print_r($cc->getCommands());
         $cc->runCommand($closure);

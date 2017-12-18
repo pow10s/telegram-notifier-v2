@@ -63,7 +63,7 @@ class TelegramDb
      * @param $chatId
      * @return array|null|object
      */
-    public function deleteContact($chatId)
+    public static function deleteContact($chatId)
     {
         global $wpdb;
         $chat = $wpdb->get_results("
@@ -79,7 +79,7 @@ class TelegramDb
      * @param $status
      * @return false|int
      */
-    public function updateStatus($chatId, $status)
+    public static function updateStatus($chatId, $status)
     {
         global $wpdb;
         $chat = $wpdb->update($wpdb->prefix . 'telegram_users', ['status' => $status], ['chat_id' => $chatId], ['%s'],
