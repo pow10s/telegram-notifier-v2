@@ -9,20 +9,29 @@
 namespace TelegramNotifier\TelegramChain\Commands;
 
 
+use TelegramBot\Api\BotApi;
+use TelegramNotifier\Helper;
 use TelegramNotifier\TelegramDb;
 
 class Start extends Command
 {
-    protected $name = 'start';
+    protected $name = '/start';
 
     protected $description = 'Hello, thank`s for subscribing. Commands list: /help';
 
     public function handle($closure)
     {
-        if ($closure()->getMessage()->getText() == '/start') {
-            $chatId = $closure()->getMessage()->getChat()->getId();
-            TelegramDb::addContact($chatId);
-            $this->api->sendMessage($chatId, $this->getDecription());
+        if (Helper::isLongPolling($closure, $this->api, BotApi::class)) {
+            if ($closure()->getMessage()->getText() == $this->getName()) {
+                $chatId = $closure()->getMessage()->getChat()->getId();
+                TelegramDb::addContact($chatId);
+                $this->api->sendMessage($chatId, $this->getDecription());
+            }
+        }else {
+            $bot = $this->api;
+            $bot->command($this->getName(), function ($message) use ($bot){
+                $bot->sendMessage($message->getChat()->getId(), $this->getDecription());
+            });
         }
     }
 

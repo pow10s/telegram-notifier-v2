@@ -21,11 +21,11 @@ class CommandChainProcessor
     {
         $cc = new CommandChain($api);
         $cc->addCommands([
-            new Search(),
             new Start(),
+/*            new Search(),
             new Help(),
             new Admin(),
-            new Stop()
+            new Stop()*/
         ]);
         $cc->runCommand($closure);
     }
