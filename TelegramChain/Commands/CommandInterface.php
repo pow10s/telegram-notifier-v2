@@ -11,7 +11,18 @@ namespace TelegramNotifier\TelegramChain\Commands;
 
 interface CommandInterface
 {
+    /**
+     * Processing command
+     * @param $api
+     * @param $closure
+     * @return mixed
+     */
     public function make($api, $closure);
 
-    public function handle($closure);
+    /**
+     * Command hanler
+     * @param $data
+     * @return mixed
+     */
+    public function handle($data);
 }

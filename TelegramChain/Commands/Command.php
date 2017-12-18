@@ -11,32 +11,67 @@ namespace TelegramNotifier\TelegramChain\Commands;
 
 abstract class Command implements CommandInterface
 {
+    /**
+     * Command name
+     * @var $name
+     */
     protected $name;
 
+    /**
+     * Command description
+     * @var $description
+     */
     protected $description;
 
+    /**
+     * Bot api
+     * @var $api
+     */
     protected $api;
 
+    /**
+     * Get command name
+     * @return mixed
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     *Get Bot Api
+     * @return mixed
+     */
     public function getApi()
     {
         return $this->api;
     }
 
+    /**
+     * Get command description
+     * @return mixed
+     */
     public function getDecription()
     {
         return $this->description;
     }
 
-    public function make($api, $closure)
+    /**
+     * @uses CommandInterface
+     * @param $api
+     * @param $data
+     * @return mixed
+     */
+    public function make($api, $data)
     {
         $this->api = $api;
-        return $this->handle($closure);
+        return $this->handle($data);
     }
 
-    abstract public function handle($closure);
+    /**
+     * @uses CommandInterface
+     * @param $data
+     * @return mixed
+     */
+    abstract public function handle($data);
 }

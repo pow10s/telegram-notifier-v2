@@ -14,8 +14,14 @@ use \TelegramBot\Api\Client;
 
 class CommandChain
 {
+    /**
+     * @var $api \TelegramBot\Api\
+     */
     private $api;
 
+    /**
+     * @var $commands array
+     */
     private $commands = [];
 
     public function __construct($api)
@@ -23,6 +29,10 @@ class CommandChain
         $this->api = $api;
     }
 
+    /**
+     * Adding array of commands
+     * @param $commandName
+     */
     public function addCommand($commandName)
     {
         if ($this->isCommandExist($commandName)) {
@@ -32,6 +42,10 @@ class CommandChain
         }
     }
 
+    /**
+     * Adding single command
+     * @param $commandNames
+     */
     public function addCommands($commandNames)
     {
         foreach ($commandNames as $command) {
@@ -39,22 +53,35 @@ class CommandChain
         }
     }
 
+    /**
+     * Get commands
+     * @return array
+     */
     public function getCommands()
     {
         return $this->commands;
     }
 
-    public function runCommand($closure)
+    /**
+     * Run command
+     * @param $data
+     */
+    public function runCommand($data)
     {
         if ($this->commands) {
             foreach ($this->commands as $command) {
-                if ($command->make($this->api, $closure)) {
+                if ($command->make($this->api, $data)) {
                     return;
                 }
             }
         }
     }
 
+    /**
+     * Check if comamnd exist in array
+     * @param $name
+     * @return bool
+     */
     private function isCommandExist($name): bool
     {
         return (in_array($name, $this->getCommands())) ? true : false;

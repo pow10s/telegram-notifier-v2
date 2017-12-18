@@ -58,18 +58,36 @@ class Helper
         return $str;
     }
 
+    /**
+     * Check if server not on localhost environment and SSL enabled
+     * @return bool
+     */
     public static function ifNotLocalhostAndSslEnabled(): bool
     {
         return ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || !is_ssl()) ? true : false;
     }
 
+    /**
+     * Check if wordpress option exists
+     * @param $option
+     * @param $arrayOfOptions
+     * @param $optionName
+     * @return bool
+     */
     public static function isOptionExist($option, $arrayOfOptions, $optionName): bool
     {
         return (isset($option) && array_key_exists($optionName, $arrayOfOptions)) ? true : false;
     }
 
-    public static function isLongPolling($arg, $object, $class)
+    /**
+     * Check if $data not null and Class is for working with long polling method
+     * @param $data
+     * @param $object
+     * @param $class
+     * @return bool
+     */
+    public static function isLongPolling($data, $object, $class)
     {
-        return (!is_null($arg) && $object instanceof $class) ? true : false;
+        return (!is_null($data) && $object instanceof $class) ? true : false;
     }
 }

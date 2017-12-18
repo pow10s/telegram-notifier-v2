@@ -17,15 +17,20 @@ use TelegramNotifier\TelegramChain\Commands\Stop;
 
 class CommandChainProcessor
 {
+    /**
+     * Command runner
+     * @param $api
+     * @param $closure
+     */
     public static function run($api, $closure)
     {
         $cc = new CommandChain($api);
         $cc->addCommands([
             new Start(),
-/*            new Search(),
+            new Stop(),
             new Help(),
+            new Search(),
             new Admin(),
-            new Stop()*/
         ]);
         $cc->runCommand($closure);
     }

@@ -142,7 +142,7 @@ class TelegramDb
      * @param $chatId
      * @return bool
      */
-    public function isAdmin($chatId)
+    public static function isAdmin($chatId)
     {
         global $wpdb;
         $chat = $wpdb->get_results("

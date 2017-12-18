@@ -30,9 +30,7 @@ class LongPolling implements PollingMechanism
             $responce = $botApi->getUpdates($this->offset, 60);
             foreach ($responce as $data) {
                 if ($data->getMessage()) {
-                    CommandChainProcessor::run($botApi, function () use ($data) {
-                        return $data;
-                    });
+                    CommandChainProcessor::run($botApi, $data);
                 }
                 $this->offset = $responce[count($responce) - 1]->getUpdateId() + 1;
             }
