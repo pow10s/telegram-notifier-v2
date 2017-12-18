@@ -27,7 +27,6 @@ class CommandChainProcessor
             new Admin(),
             new Stop()
         ]);
-        print_r($cc->getCommands());
         $cc->runCommand($closure);
     }
 }
