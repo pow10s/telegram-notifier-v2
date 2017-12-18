@@ -3,25 +3,27 @@
  * Created by PhpStorm.
  * User: stosdima
  * Date: 18.12.17
- * Time: 1:14
+ * Time: 6:24
  */
 
 namespace TelegramNotifier\TelegramChain\Commands;
 
 
-use TelegramNotifier\TelegramDb;
-
-class Start extends Command
+class Help extends Command
 {
-    protected $name = 'start';
+    protected $name = 'help';
 
-    protected $description = 'Hello, thank`s for subscribing. Commands list: /help';
+    protected $description =
+        'List of commands:
+        /start - start work with bot 
+        /stop - stop work with bot
+        /search - search posts by categories
+        /admin - site administrator panel';
 
     public function handle($closure)
     {
-        if ($closure()->getMessage()->getText() == '/start') {
+        if ($closure()->getMessage()->getText() == '/help') {
             $chatId = $closure()->getMessage()->getChat()->getId();
-            TelegramDb::addContact($chatId);
             $this->api->sendMessage($chatId, $this->getDecription());
         }
     }

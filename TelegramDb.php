@@ -45,7 +45,7 @@ class TelegramDb
      * Adding user in database
      * @param int $chatId
      */
-    public function addContact($chatId)
+    public static function addContact($chatId)
     {
         global $wpdb;
         $chat = $wpdb->get_results("
@@ -92,7 +92,7 @@ class TelegramDb
      * @param $chatId
      * @return false|int
      */
-    public function resetStatus($chatId)
+    public static function resetStatus($chatId)
     {
         global $wpdb;
         $chat = $chat = $wpdb->update($wpdb->prefix . 'telegram_users', ['status' => 'start'], ['chat_id' => $chatId],

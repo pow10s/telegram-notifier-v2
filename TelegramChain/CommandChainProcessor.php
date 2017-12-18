@@ -9,18 +9,21 @@
 namespace TelegramNotifier\TelegramChain;
 
 
+use TelegramNotifier\TelegramChain\Commands\Help;
 use TelegramNotifier\TelegramChain\Commands\Search;
 use TelegramNotifier\TelegramChain\Commands\Start;
-use TelegramNotifier\TelegramChain\Commands\Stop;
 
 class CommandChainProcessor
 {
-    public static function run($command)
+    public static function run($api, $closure)
     {
-        $cc = new CommandChain();
-        $cc->addCommand(new Start());
-        $cc->addCommand(new Stop());
-        $cc->addCommand(new Search());
-        $cc->runCommand($command);
+        $cc = new CommandChain($api);
+        $cc->addCommands([
+            new Search(),
+            new Start(),
+            new Help()
+        ]);
+        print_r($cc->getCommands());
+        $cc->runCommand($closure);
     }
 }
