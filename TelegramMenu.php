@@ -168,7 +168,7 @@ class TelegramMenu
 
     public function checkbox_callback_function()
     {
-        $this->options['admin_enabled'] = empty( $this->options['admin_enabled'] ) ? 0 : 1;
+        $this->options['admin_enabled'] = empty($this->options['admin_enabled']) ? 0 : 1;
         echo '<input 
 		name="telegram_bot_options[admin_enabled]" 
 		type="checkbox" 
