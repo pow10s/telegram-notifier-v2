@@ -24,7 +24,10 @@ class Webhook implements PollingMechanism
     {
         try {
             $client = new \TelegramBot\Api\Client($this->options['bot_token']);
-            CommandChainProcessor::run($client, null);
+            CommandChainProcessor::run($client, null, CommandChainProcessor::COMMAND);
+            $client->callbackQuery(function (\TelegramBot\Api\Types\CallbackQuery $callbackQuery) use ($client) {
+                CommandChainProcessor::run($client, $callbackQuery, CommandChainProcessor::CALLBACKQUERY);
+            });
             $client->run();
         } catch (\TelegramBot\Api\Exception $e) {
             echo $e->getMessage();

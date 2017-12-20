@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stosdima
- * Date: 15.12.17
- * Time: 16:59
- */
 
 namespace TelegramNotifier\Strategy;
 
@@ -22,6 +16,9 @@ class LongPolling implements PollingMechanism
         $this->options = get_option('telegram_bot_options');
     }
 
+    /**
+     * @uses PollingMechanism
+     */
     public function process()
     {
         try {
@@ -30,7 +27,9 @@ class LongPolling implements PollingMechanism
             $responce = $botApi->getUpdates($this->offset, 60);
             foreach ($responce as $data) {
                 if ($data->getMessage()) {
-                    CommandChainProcessor::run($botApi, $data);
+                    CommandChainProcessor::run($botApi, $data, CommandChainProcessor::COMMAND);
+                } elseif ($data->getCallbackQuery()) {
+                    CommandChainProcessor::run($botApi, $data, CommandChainProcessor::CALLBACKQUERY);
                 }
                 $this->offset = $responce[count($responce) - 1]->getUpdateId() + 1;
             }

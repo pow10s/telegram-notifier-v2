@@ -9,6 +9,7 @@
 namespace TelegramNotifier\TelegramChain\Commands;
 
 
+use TelegramNotifier\TelegramChain\Command;
 use TelegramBot\Api\BotApi;
 use TelegramNotifier\Helper;
 

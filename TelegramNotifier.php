@@ -1,5 +1,6 @@
 <?php
 
+
 namespace TelegramNotifier;
 
 /**
@@ -12,7 +13,6 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
-
 use TelegramNotifier\Strategy\PollingManager;
 
 if (!defined('ABSPATH')) {
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
     $path = $_SERVER['DOCUMENT_ROOT'];
     include_once $path . '/wp/wp-load.php';
 }
-define('TELEGRAM_NOTIFIER_PLUGIN_DIR', plugin_dir_path(__FILE__));
+
 if (!function_exists('add_action')) {
     echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
     exit;
@@ -37,6 +37,7 @@ class TelegramNotifier
             $settingsPage = new \TelegramNotifier\TelegramMenu();
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
+            $bot = new TelegramBot();
             $pollManager = new PollingManager();
             $pollManager->getPolling(PollingManager::LONG_POLLING)->process();
         }

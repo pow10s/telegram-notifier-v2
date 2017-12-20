@@ -11,6 +11,7 @@ namespace TelegramNotifier\TelegramChain\Commands;
 
 use TelegramBot\Api\BotApi;
 use TelegramNotifier\Helper;
+use TelegramNotifier\TelegramChain\Command;
 use TelegramNotifier\TelegramDb;
 
 class Search extends Command
@@ -25,7 +26,7 @@ class Search extends Command
             [
                 [
                     ['text' => 'Categories', 'callback_data' => 'categories'],
-                    ['text' => 'Keyword', 'callback_data' => 'search-keyword'],
+                    ['text' => 'Keyword', 'callback_data' => 'login'],
                 ]
             ]
         );
@@ -33,7 +34,7 @@ class Search extends Command
             if ($data->getMessage()->getText() == $this->getName()) {
                 $chatId = $data->getMessage()->getChat()->getId();
                 TelegramDb::updateStatus($chatId, 'search-keyword');
-                $this->api->sendMessage($chatId, $this->getDecription(), 'html', false, null, $keyboard);
+                $this->getApi()->sendMessage($chatId, $this->getDecription(), 'html', false, null, $keyboard);
             }
         } else {
             $bot = $this->api;

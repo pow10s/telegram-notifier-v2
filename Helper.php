@@ -35,7 +35,7 @@ class Helper
      * @param string $postBody
      * @return string
      */
-    public function generate_telegram_post(string $postUrl, string $postTitle, string $postBody): string
+    public static function generate_telegram_post(string $postUrl, string $postTitle, string $postBody): string
     {
         return '<a href=' . '"' . $postUrl . '"' . '>' . $postTitle . '</a>' . strip_tags("\n" . substr("$postBody", 0,
                     400));
@@ -89,5 +89,11 @@ class Helper
     public static function isLongPolling($data, $object, $class)
     {
         return (!is_null($data) && $object instanceof $class) ? true : false;
+    }
+
+    public static function getPostsIfExist()
+    {
+        $posts = get_posts(['numberposts' => 0]);
+        return ($posts) ? $posts : false;
     }
 }

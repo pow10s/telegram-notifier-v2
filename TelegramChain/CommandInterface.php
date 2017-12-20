@@ -6,7 +6,7 @@
  * Time: 0:35
  */
 
-namespace TelegramNotifier\TelegramChain\Commands;
+namespace TelegramNotifier\TelegramChain;
 
 
 interface CommandInterface
@@ -17,7 +17,7 @@ interface CommandInterface
      * @param $closure
      * @return mixed
      */
-    public function make($api, $closure);
+    public function make($api, $data);
 
     /**
      * Command hanler

@@ -11,6 +11,7 @@ namespace TelegramNotifier\TelegramChain\Commands;
 
 use TelegramBot\Api\BotApi;
 use TelegramNotifier\Helper;
+use TelegramNotifier\TelegramChain\Command;
 use TelegramNotifier\TelegramDb;
 
 class Start extends Command

@@ -105,7 +105,7 @@ class TelegramDb
      * Get all users in database
      * @return array|null|object
      */
-    public function chatAll()
+    public static function chatAll()
     {
         global $wpdb;
         $chats = $wpdb->get_results("SELECT * FROM wp_telegram_users");
@@ -117,7 +117,7 @@ class TelegramDb
      * @param $chatId
      * @return array|null|object
      */
-    public function getStatus($chatId)
+    public static function getStatus($chatId)
     {
         global $wpdb;
         $chats = $wpdb->get_results("SELECT * FROM wp_telegram_users WHERE chat_id = $chatId");

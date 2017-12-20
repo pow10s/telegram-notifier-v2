@@ -68,8 +68,8 @@ class CommandChain
      */
     public function runCommand($data)
     {
-        if ($this->commands) {
-            foreach ($this->commands as $command) {
+        if ($this->getCommands()) {
+            foreach ($this->getCommands() as $command) {
                 if ($command->make($this->api, $data)) {
                     return;
                 }

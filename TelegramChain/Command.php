@@ -6,7 +6,7 @@
  * Time: 0:37
  */
 
-namespace TelegramNotifier\TelegramChain\Commands;
+namespace TelegramNotifier\TelegramChain;
 
 
 abstract class Command implements CommandInterface
@@ -54,6 +54,11 @@ abstract class Command implements CommandInterface
     public function getDecription()
     {
         return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     /**
