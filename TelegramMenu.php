@@ -105,6 +105,14 @@ class TelegramMenu
             'telegram-setting-admin', // Page
             'setting_section_id' // Section
         );
+
+        add_settings_field(
+            'admin_enabled', // ID
+            'Disable/Enable Telegram admin-panel: ', // Title
+            [$this, 'checkbox_callback_function'], // Callback
+            'telegram-setting-admin', // Page
+            'setting_section_id' // Section
+        );
     }
 
     /**
@@ -120,6 +128,9 @@ class TelegramMenu
         }
         if (isset($input['verif_code'])) {
             $new_input['verif_code'] = sanitize_text_field($input['verif_code']);
+        }
+        if (isset($input['admin_enabled'])) {
+            $new_input['admin_enabled'] = intval($input['admin_enabled']);
         }
         return $new_input;
     }
@@ -153,6 +164,17 @@ class TelegramMenu
             '<input readonly="readonly" type="text" id="verif_code" name="telegram_bot_options[verif_code]" value="%s" />',
             isset($this->options['verif_code']) ? esc_attr($this->options['verif_code']) : $helper->randomString()
         );
+    }
+
+    public function checkbox_callback_function()
+    {
+        $this->options['admin_enabled'] = empty( $this->options['admin_enabled'] ) ? 0 : 1;
+        echo '<input 
+		name="telegram_bot_options[admin_enabled]" 
+		type="checkbox" 
+		' . checked(1, $this->options['admin_enabled'], false) . ' 
+		value="1" 
+	/>';
     }
 
 }
