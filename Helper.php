@@ -74,9 +74,9 @@ class Helper
      * @param $optionName
      * @return bool
      */
-    public static function isOptionExist($option, $arrayOfOptions, $optionName): bool
+    public static function isOptionExist($arrayOfOptions, $optionName): bool
     {
-        return (isset($option) && array_key_exists($optionName, $arrayOfOptions)) ? true : false;
+        return (isset($arrayOfOptions) && array_key_exists($optionName, $arrayOfOptions)) ? true : false;
     }
 
     /**
