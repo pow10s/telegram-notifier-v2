@@ -13,6 +13,7 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
+use TelegramNotifier\Container\Container;
 use TelegramNotifier\Strategy\PollingManager;
 
 if (!defined('ABSPATH')) {
@@ -33,7 +34,9 @@ class TelegramNotifier
     public function __construct()
     {
         if (is_admin()) {
-            $db = new \TelegramNotifier\TelegramDb();
+            $container = ContainerInitializator::init();
+            $db = $container->get(TelegramDb::class);
+            /*$db = new \TelegramNotifier\TelegramDb();*/
             $settingsPage = new \TelegramNotifier\TelegramMenu();
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
