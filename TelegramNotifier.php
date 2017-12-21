@@ -34,9 +34,7 @@ class TelegramNotifier
     public function __construct()
     {
         if (is_admin()) {
-            $container = ContainerInitializator::init();
-            $db = $container->get(TelegramDb::class);
-            /*$db = new \TelegramNotifier\TelegramDb();*/
+            $db = ContainerInitializator::run()->get(TelegramDb::class);
             $settingsPage = new \TelegramNotifier\TelegramMenu();
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
