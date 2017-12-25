@@ -3,6 +3,7 @@
 namespace TelegramNotifier;
 
 
+use TelegramNotifier\TelegramBot\Agregator;
 use TelegramNotifier\TelegramDb;
 use TelegramNotifier\Helper;
 use \TelegramBot\Api\BotApi;
@@ -17,9 +18,11 @@ return [
     ],
     BotApi::class => [
         'class' => BotApi::class,
-        'arguments' => ['test']
     ],
     Client::class => [
         'class' => Client::class
+    ],
+    Agregator::class => [
+        'class' => Agregator::class
     ]
 ];

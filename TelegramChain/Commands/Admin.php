@@ -22,21 +22,11 @@ class Admin extends Command
 
     public function handle($data)
     {
-        if (Helper::isLongPolling($data, $this->getApi(), BotApi::class)) {
-            if ($data->getMessage()->getText() == $this->getName()) {
-                $chatId = $data->getMessage()->getChat()->getId();
-                $keyboard = $this->keyboard($chatId);
-                TelegramDb::updateStatus($chatId, 'admin');
-                $this->getApi()->sendMessage($chatId, $this->getDecription(), 'html', null, false, $keyboard);
-            }
-        } else {
-            $bot = $this->getApi();
-            $bot->command($this->getName(), function ($message) use ($bot) {
-                $chatId = $message->getChat()->getId();
-                $keyboard = $this->keyboard($chatId);
-                TelegramDb::updateStatus($chatId, 'admin');
-                $bot->sendMessage($chatId, $this->getDecription(), 'html', null, false, $keyboard);
-            });
+        if ($data->getMessage()->getText() == $this->getName()) {
+            $chatId = $data->getMessage()->getChat()->getId();
+            $keyboard = $this->keyboard($chatId);
+            TelegramDb::updateStatus($chatId, 'admin');
+            $this->getApi()->sendMessage($chatId, $this->getDecription(), 'html', null, false, $keyboard);
         }
     }
 

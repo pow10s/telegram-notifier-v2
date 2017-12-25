@@ -9,9 +9,8 @@ class ContainerInitializator
 {
     public static function run()
     {
-        $services = include __DIR__.'/config.php';
-        return new Container($services);
+        $services = include __DIR__ . '/config.php';
+        $parameters = include  __DIR__ . '/params.php';
+        return new Container($services, $parameters);
     }
 }
-
-

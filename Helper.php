@@ -64,7 +64,7 @@ class Helper
      */
     public static function ifNotLocalhostAndSslEnabled(): bool
     {
-        return ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || !is_ssl()) ? true : false;
+        return ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || !is_ssl()) ? false : true;
     }
 
     /**
@@ -77,18 +77,6 @@ class Helper
     public static function isOptionExist($arrayOfOptions, $optionName): bool
     {
         return (isset($arrayOfOptions) && array_key_exists($optionName, $arrayOfOptions)) ? true : false;
-    }
-
-    /**
-     * Check if $data not null and Class is for working with long polling method
-     * @param $data
-     * @param $object
-     * @param $class
-     * @return bool
-     */
-    public static function isLongPolling($data, $object, $class)
-    {
-        return (!is_null($data) && $object instanceof $class) ? true : false;
     }
 
     public static function getPostsIfExist()

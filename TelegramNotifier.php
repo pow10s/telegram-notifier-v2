@@ -3,6 +3,7 @@
 
 namespace TelegramNotifier;
 
+
 /**
  * Plugin Name: Telegram Notifier V2
  * Plugin URI: some href
@@ -13,8 +14,7 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
-use TelegramNotifier\Container\Container;
-use TelegramNotifier\Strategy\PollingManager;
+use TelegramNotifier\TelegramBot;
 
 if (!defined('ABSPATH')) {
     //If wordpress isn't loaded load it up.
@@ -39,8 +39,8 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
-            $pollManager = new PollingManager();
-            $pollManager->getPolling(PollingManager::LONG_POLLING)->process();
+            $lp = new TelegramBot\LongPolling();
+            print_r($lp->run());
         }
     }
 }
