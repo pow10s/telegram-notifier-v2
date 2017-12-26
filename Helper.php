@@ -35,7 +35,7 @@ class Helper
      * @param string $postBody
      * @return string
      */
-    public static function generate_telegram_post(string $postUrl, string $postTitle, string $postBody): string
+    public function generate_telegram_post(string $postUrl, string $postTitle, string $postBody): string
     {
         return '<a href=' . '"' . $postUrl . '"' . '>' . $postTitle . '</a>' . strip_tags("\n" . substr("$postBody", 0,
                     400));
@@ -62,9 +62,19 @@ class Helper
      * Check if server not on localhost environment and SSL enabled
      * @return bool
      */
-    public static function ifNotLocalhostAndSslEnabled(): bool
+    public function ifNotLocalhostAndSslEnabled(): bool
     {
         return ($_SERVER["SERVER_ADDR"] == '127.0.0.1' || !is_ssl()) ? false : true;
+    }
+
+    /**
+     * Get exists posts in wordpress database
+     * @return array|bool
+     */
+    public function getPostsIfExist()
+    {
+        $posts = get_posts(['numberposts' => 0]);
+        return ($posts) ? $posts : false;
     }
 
     /**
@@ -74,14 +84,8 @@ class Helper
      * @param $optionName
      * @return bool
      */
-    public static function isOptionExist($arrayOfOptions, $optionName): bool
+    public function isOptionExist($arrayOfOptions, $optionName): bool
     {
         return (isset($arrayOfOptions) && array_key_exists($optionName, $arrayOfOptions)) ? true : false;
-    }
-
-    public static function getPostsIfExist()
-    {
-        $posts = get_posts(['numberposts' => 0]);
-        return ($posts) ? $posts : false;
     }
 }

@@ -45,7 +45,7 @@ class TelegramDb
      * Adding user in database
      * @param int $chatId
      */
-    public static function addContact($chatId)
+    public function addContact($chatId)
     {
         global $wpdb;
         $chat = $wpdb->get_results("
@@ -63,7 +63,7 @@ class TelegramDb
      * @param $chatId
      * @return array|null|object
      */
-    public static function deleteContact($chatId)
+    public function deleteContact($chatId)
     {
         global $wpdb;
         $chat = $wpdb->get_results("
@@ -79,7 +79,7 @@ class TelegramDb
      * @param $status
      * @return false|int
      */
-    public static function updateStatus($chatId, $status)
+    public function updateStatus($chatId, $status)
     {
         global $wpdb;
         $chat = $wpdb->update($wpdb->prefix . 'telegram_users', ['status' => $status], ['chat_id' => $chatId], ['%s'],
@@ -92,7 +92,7 @@ class TelegramDb
      * @param $chatId
      * @return false|int
      */
-    public static function resetStatus($chatId)
+    public function resetStatus($chatId)
     {
         global $wpdb;
         $chat = $chat = $wpdb->update($wpdb->prefix . 'telegram_users', ['status' => 'start'], ['chat_id' => $chatId],
@@ -105,7 +105,7 @@ class TelegramDb
      * Get all users in database
      * @return array|null|object
      */
-    public static function chatAll()
+    public function chatAll()
     {
         global $wpdb;
         $chats = $wpdb->get_results("SELECT * FROM wp_telegram_users");
@@ -117,7 +117,7 @@ class TelegramDb
      * @param $chatId
      * @return array|null|object
      */
-    public static function getStatus($chatId)
+    public function getStatus($chatId)
     {
         global $wpdb;
         $chats = $wpdb->get_results("SELECT * FROM wp_telegram_users WHERE chat_id = $chatId");
@@ -142,7 +142,7 @@ class TelegramDb
      * @param $chatId
      * @return bool
      */
-    public static function isAdmin($chatId)
+    public function isAdmin($chatId)
     {
         global $wpdb;
         $chat = $wpdb->get_results("

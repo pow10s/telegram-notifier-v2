@@ -9,16 +9,13 @@
 namespace TelegramNotifier\TelegramBot;
 
 
-use TelegramNotifier\TelegramBot\Factory\TelegramBotFactory;
-
 class Registrator
 {
     protected $agregator;
     protected $factory;
 
-    public function __construct(Agregator $agregator, TelegramBotFactory $factory)
+    public function __construct(Agregator $agregator)
     {
         $this->agregator = $agregator;
-        $this->factory = $factory;
     }
 }

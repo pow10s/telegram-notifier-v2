@@ -2,6 +2,8 @@
 
 namespace TelegramNotifier;
 
+use TelegramNotifier\ServiceContainer\Loader;
+
 /**
  * Telegram_Menu Class
  * @version 0.1.0
@@ -15,10 +17,16 @@ class TelegramMenu
     private $options;
 
     /**
+     * @var mixed $helper
+     */
+    private $helper;
+
+    /**
      * Telegram_Menu constructor.
      */
     public function __construct()
     {
+        $this->helper = Loader::resolve('helper');
         add_action('admin_menu', [$this, 'add_plugin_page']);
         add_action('admin_init', [$this, 'page_init']);
     }
@@ -44,8 +52,8 @@ class TelegramMenu
     public function create_admin_page()
     {
         $this->options = get_option('telegram_bot_options');
-        if (Helper::isOptionExist($this->options, 'bot_token')) {
-            if (!Helper::ifNotLocalhostAndSslEnabled()) {
+        if ($this->helper->isOptionExist($this->options, 'bot_token')) {
+            if (!$this->helper->ifNotLocalhostAndSslEnabled()) {
                 echo '<div class="notice notice-error is-dismissible">
                      <p>' . __('Warning: the WebHooks is not working while you are in a localhost environment or SSL not active.') . '</p>
                      </div>';
@@ -159,10 +167,9 @@ class TelegramMenu
      */
     public function verif_code_callback()
     {
-        $helper = new \TelegramNotifier\Helper();
         printf(
             '<input readonly="readonly" type="text" id="verif_code" name="telegram_bot_options[verif_code]" value="%s" />',
-            isset($this->options['verif_code']) ? esc_attr($this->options['verif_code']) : $helper->randomString()
+            isset($this->options['verif_code']) ? esc_attr($this->options['verif_code']) : $this->helper->randomString()
         );
     }
 

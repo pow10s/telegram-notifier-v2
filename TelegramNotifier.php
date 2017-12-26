@@ -1,6 +1,5 @@
 <?php
 
-
 namespace TelegramNotifier;
 
 
@@ -14,7 +13,7 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
-use TelegramNotifier\TelegramBot;
+use TelegramNotifier\ServiceContainer\Loader;
 
 if (!defined('ABSPATH')) {
     //If wordpress isn't loaded load it up.
@@ -28,19 +27,18 @@ if (!function_exists('add_action')) {
 }
 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
+require_once(__DIR__ . '/config.php');
 
 class TelegramNotifier
 {
     public function __construct()
     {
         if (is_admin()) {
-            $db = ContainerInitializator::run()->get(TelegramDb::class);
+            $db = Loader::resolve('db');
             $settingsPage = new \TelegramNotifier\TelegramMenu();
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
-            $lp = new TelegramBot\LongPolling();
-            print_r($lp->run());
         }
     }
 }

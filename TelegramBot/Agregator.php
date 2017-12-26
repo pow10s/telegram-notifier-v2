@@ -41,6 +41,7 @@ class Agregator
     public function register()
     {
         if (!Helper::ifNotLocalhostAndSslEnabled()) {
+            echo 'long polling';
         } else {
             echo 'webhook';
         }
