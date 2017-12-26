@@ -16,7 +16,6 @@ namespace TelegramNotifier;
 use TelegramNotifier\ServiceContainer\Loader;
 
 if (!defined('ABSPATH')) {
-    //If wordpress isn't loaded load it up.
     $path = $_SERVER['DOCUMENT_ROOT'];
     include_once $path . '/wp/wp-load.php';
 }

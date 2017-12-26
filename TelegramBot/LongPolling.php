@@ -9,8 +9,6 @@
 namespace TelegramNotifier\TelegramBot;
 
 
-use TelegramNotifier\TelegramBot\Factory\TelegramBotFactory;
-
 class LongPolling extends Agregator implements PollingMechanism
 {
     public function run()
