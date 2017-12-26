@@ -11,6 +11,7 @@ namespace TelegramNotifier\TelegramBot;
 
 use TelegramNotifier\Exception\BotCommandException;
 use TelegramNotifier\Helper;
+use TelegramNotifier\ServiceContainer\Loader;
 
 class Agregator
 {
@@ -40,7 +41,8 @@ class Agregator
 
     public function register()
     {
-        if (!Helper::ifNotLocalhostAndSslEnabled()) {
+        $helper = Loader::resolve('helper');
+        if (!$helper->ifNotLocalhostAndSslEnabled()) {
             echo 'long polling';
         } else {
             echo 'webhook';
