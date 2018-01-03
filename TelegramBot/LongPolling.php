@@ -27,9 +27,8 @@ class LongPolling implements PollingMechanism
             foreach ($updates as $update) {
                 $this->offset = $updates[count($updates) - 1]->getUpdateId() + 1;
             }
-            $updates = $client->getUpdates($this->offset, 60);
             $client->handle($updates);
-
+            $updates = $client->getUpdates($this->offset, 60);
         } catch (\Exception $e) {
             $e->getMessage();
         }

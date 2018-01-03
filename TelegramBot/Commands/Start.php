@@ -10,14 +10,12 @@ namespace TelegramNotifier\TelegramBot\Commands;
 
 
 use TelegramNotifier\ServiceContainer\Loader;
+use TelegramNotifier\TelegramBot\Commands\CommandInterface;
 
 class Start implements CommandInterface
 {
-    public function runCommand($message)
+    public function onCommand($command)
     {
-        $db = Loader::resolve('db');
-        $chatId = $message->getChat()->getId();
-        $db->addContact($chatId);
-        $bot->sendMessage($chatId, $this->getDecription());
+
     }
 }
