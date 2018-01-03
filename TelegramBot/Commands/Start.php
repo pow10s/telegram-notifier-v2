@@ -12,10 +12,10 @@ namespace TelegramNotifier\TelegramBot\Commands;
 use TelegramNotifier\ServiceContainer\Loader;
 use TelegramNotifier\TelegramBot\Commands\CommandInterface;
 
-class Start implements CommandInterface
+class Start extends Command implements CommandInterface
 {
     public function onCommand($command)
     {
-
+        $this->start();
     }
 }

@@ -14,6 +14,7 @@ namespace TelegramNotifier;
  */
 
 use TelegramNotifier\ServiceContainer\Loader;
+use TelegramNotifier\TelegramBot\Commands\Start;
 use TelegramNotifier\TelegramBot\LongPolling;
 
 if (!defined('ABSPATH')) {
@@ -39,9 +40,6 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
-            $lp = new LongPolling();
-            $lp->run();
-
         }
     }
 }
