@@ -14,6 +14,7 @@ namespace TelegramNotifier;
  */
 
 use TelegramNotifier\ServiceContainer\Loader;
+use TelegramNotifier\TelegramBot\LongPolling;
 
 if (!defined('ABSPATH')) {
     $path = $_SERVER['DOCUMENT_ROOT'];
@@ -38,6 +39,9 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
+            $lp = new LongPolling();
+            $lp->run();
+
         }
     }
 }

@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: stosdima
- * Date: 22.12.17
- * Time: 14:41
+ * Date: 03.01.18
+ * Time: 15:59
  */
 
 namespace TelegramNotifier\TelegramBot;
@@ -11,21 +11,27 @@ namespace TelegramNotifier\TelegramBot;
 
 use TelegramNotifier\ServiceContainer\Loader;
 
-class LongPolling extends Agregator implements PollingMechanism
+class LongPolling implements PollingMechanism
 {
     protected $offset;
 
     public function run()
     {
-        $this->offset = 0;
         try {
-            $response = Loader::resolve('botApi')->getUpdates($this->offset, 60);
-            foreach ($response as $data) {
-                $this->offset = $response[count($response) - 1]->getUpdateId() + 1;
+            $this->offset = 0;
+            $client = Loader::resolve('clientApi');
+            $client->command('stop', function ($message) use ($client) {
+                $client->sendMessage($message->getChat()->getId(), 'You have been deleted from bot database');
+            });
+            $updates = $client->getUpdates($this->offset, 60);
+            foreach ($updates as $update) {
+                $this->offset = $updates[count($updates) - 1]->getUpdateId() + 1;
             }
-            $response = Loader::resolve('botApi')->getUpdates($this->offset, 60);
+            $updates = $client->getUpdates($this->offset, 60);
+            $client->handle($updates);
+
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            $e->getMessage();
         }
     }
 }

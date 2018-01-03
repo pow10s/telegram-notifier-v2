@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: stosdima
- * Date: 22.12.17
- * Time: 14:41
+ * Date: 03.01.18
+ * Time: 15:58
  */
 
 namespace TelegramNotifier\TelegramBot;
