@@ -46,6 +46,7 @@ class TelegramNotifier
             $bot = new TelegramBot();
             $test = new CommandProcessor();
             $test->addCommands([Start::class, Stop::class]);
+            print_r($test->getCommands());
             $test->commandsHandler();
         }
     }

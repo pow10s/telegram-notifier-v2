@@ -61,4 +61,9 @@ class CommandProcessor
         $this->getCommandBus()->addCommands($names);
     }
 
+    public function getCommands()
+    {
+        return $this->getCommandBus()->getCommands();
+    }
+
 }

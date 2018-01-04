@@ -80,7 +80,7 @@ class CommandBus
         if (!empty($match)) {
             $command = $match[1];
             $arguments = $match[3];
-             $this->execute($command, $arguments, $update);
+            $this->execute($command, $arguments, $update);
         }
         return $update;
     }
