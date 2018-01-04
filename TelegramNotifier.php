@@ -13,7 +13,6 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
-use TelegramNotifier\Exception\BotCommandException;
 use TelegramNotifier\ServiceContainer\Loader;
 
 if (!defined('ABSPATH')) {
@@ -42,12 +41,13 @@ class TelegramNotifier
             try {
                 $test = Loader::resolve('commandProcessor');
                 $test->addCommands([
+                    \TelegramNotifier\TelegramBot\Commands\Help::class,
                     \TelegramNotifier\TelegramBot\Commands\Start::class,
                     \TelegramNotifier\TelegramBot\Commands\Stop::class,
-                    \TelegramNotifier\TelegramBot\Commands\Search::class
+                    \TelegramNotifier\TelegramBot\Commands\Search::class,
                 ]);
                 $test->commandsHandler();
-            } catch (BotCommandException $e) {
+            } catch (\TelegramNotifier\Exception\BotCommandException $e) {
                 echo $e->getMessage();
             }
 
