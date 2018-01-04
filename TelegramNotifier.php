@@ -13,13 +13,8 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
-use TelegramBot\Api\Types\Update;
+use TelegramNotifier\Exception\BotCommandException;
 use TelegramNotifier\ServiceContainer\Loader;
-use TelegramNotifier\TelegramBot\CommandProcessor;
-use TelegramNotifier\TelegramBot\Commands\CommandBus;
-use TelegramNotifier\TelegramBot\Commands\Start;
-use TelegramNotifier\TelegramBot\Commands\Stop;
-use TelegramNotifier\TelegramBot\LongPolling;
 
 if (!defined('ABSPATH')) {
     $path = $_SERVER['DOCUMENT_ROOT'];
@@ -44,10 +39,18 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
-            $test = new CommandProcessor();
-            $test->addCommands([Start::class, Stop::class]);
-            print_r($test->getCommands());
-            $test->commandsHandler();
+            try {
+                $test = Loader::resolve('commandProcessor');
+                $test->addCommands([
+                    \TelegramNotifier\TelegramBot\Commands\Start::class,
+                    \TelegramNotifier\TelegramBot\Commands\Stop::class,
+                    \TelegramNotifier\TelegramBot\Commands\Search::class
+                ]);
+                $test->commandsHandler();
+            } catch (BotCommandException $e) {
+                echo $e->getMessage();
+            }
+
         }
     }
 }

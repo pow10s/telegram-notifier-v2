@@ -15,6 +15,9 @@ class Stop extends Command
 
     public function handle($arguments)
     {
-        echo 'stop';
+        $client = $this->client;
+        $client->command('stop', function ($message) use ($client) {
+            $client->sendMessage($message->getChat()->getId(), 'Stopped work with bot');
+        });
     }
 }

@@ -16,9 +16,15 @@ use TelegramNotifier\TelegramBot\Commands\CommandInterface;
 
 class CommandBus
 {
+    /** List of commands
+     * @var array $commands
+     */
     protected $commands = [];
 
-    private $client;
+    /** Api
+     * @var \TelegramBot\Api\Client $client
+     */
+    protected $client;
 
     public function __construct(\TelegramBot\Api\Client $client)
     {

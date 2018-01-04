@@ -11,14 +11,43 @@ namespace TelegramNotifier\TelegramBot;
 
 use TelegramBot\Api\Types\Update;
 use TelegramNotifier\TelegramBot\Commands\CommandBus;
-use TelegramNotifier\ServiceContainer\Loader;
 
 class CommandProcessor
 {
+    protected $client;
+
+    /**
+     * @var null $commandBus
+     */
     protected $commandBus = null;
 
+    /**
+     * @var $offset
+     */
     protected $offset;
 
+    public function __construct(\TelegramBot\Api\Client $client)
+    {
+        $this->client = $client;
+    }
+
+    /**Getting CommandsBus
+     * @return null|CommandBus
+     * @throws \Exception
+     */
+    protected function getCommandBus()
+    {
+        if (is_null($this->commandBus)) {
+            return $this->commandBus = new CommandBus($this->client);
+        }
+
+        return $this->commandBus;
+    }
+
+    /**
+     * @param Update $update
+     *
+     */
     protected function processCommands(Update $update)
     {
         $message = $update->getMessage();
@@ -27,43 +56,51 @@ class CommandProcessor
         }
     }
 
-    public function getCommandBus()
-    {
-        if (is_null($this->commandBus)) {
-            return $this->commandBus = new CommandBus(Loader::resolve('clientApi'));
-        }
-
-        return $this->commandBus;
-    }
-
+    /**Incoming commands handler
+     * @param bool $webhook
+     * @throws \Exception
+     */
     public function commandsHandler($webhook = false)
     {
-        $client = Loader::resolve('clientApi');
         if (!$webhook) {
             $this->offset = 0;
-            $updates = $client->getUpdates($this->offset, 60);
+            $updates = $this->client->getUpdates($this->offset, 60);
             foreach ($updates as $update) {
                 $this->offset = $updates[count($updates) - 1]->getUpdateId() + 1;
                 $this->processCommands($update);
             }
-            $client->handle($updates);
-            $updates = $client->getUpdates($this->offset, 60);
+            $this->client->handle($updates);
+            $updates = $this->client->getUpdates($this->offset, 60);
+        } else {
+            $this->client->run();
         }
     }
 
+    /**Command adder
+     * @param $name
+     * @throws \Exception
+     * @throws \TelegramNotifier\Exception\BotCommandException
+     */
     public function addCommand($name)
     {
         $this->getCommandBus()->addCommand($name);
     }
 
+    /**Commands adder
+     * @param $names
+     * @throws \Exception
+     */
     public function addCommands($names)
     {
         $this->getCommandBus()->addCommands($names);
     }
 
+    /**Getting exists commands
+     * @return array
+     * @throws \Exception
+     */
     public function getCommands()
     {
         return $this->getCommandBus()->getCommands();
     }
-
 }
