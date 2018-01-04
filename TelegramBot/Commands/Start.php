@@ -9,13 +9,17 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
-use TelegramNotifier\ServiceContainer\Loader;
-use TelegramNotifier\TelegramBot\Commands\CommandInterface;
-
-class Start extends Command implements CommandInterface
+class Start extends Command
 {
-    public function onCommand($command)
+    protected $name = 'start';
+
+    protected $description = 'Starting command';
+
+    public function handle($arguments)
     {
-        $this->start();
+        $client = $this->client;
+        $client->command('start', function ($message) use ($client) {
+            $client->sendMessage($message->getChat()->getId(), 'Hello world');
+        });
     }
 }

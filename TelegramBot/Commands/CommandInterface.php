@@ -11,5 +11,7 @@ namespace TelegramNotifier\TelegramBot\Commands;
 
 interface CommandInterface
 {
-    public function onCommand($command);
+    public function make($telegram, $arguments, $update);
+
+    public function handle($arguments);
 }

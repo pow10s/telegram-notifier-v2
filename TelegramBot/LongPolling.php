@@ -20,9 +20,6 @@ class LongPolling implements PollingMechanism
         try {
             $this->offset = 0;
             $client = Loader::resolve('clientApi');
-            $client->command('stop', function ($message) use ($client) {
-                $client->sendMessage($message->getChat()->getId(), 'You have been deleted from bot database');
-            });
             $updates = $client->getUpdates($this->offset, 60);
             foreach ($updates as $update) {
                 $this->offset = $updates[count($updates) - 1]->getUpdateId() + 1;

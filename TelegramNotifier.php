@@ -13,8 +13,12 @@ namespace TelegramNotifier;
  * License: MIT
  */
 
+use TelegramBot\Api\Types\Update;
 use TelegramNotifier\ServiceContainer\Loader;
+use TelegramNotifier\TelegramBot\CommandProcessor;
+use TelegramNotifier\TelegramBot\Commands\CommandBus;
 use TelegramNotifier\TelegramBot\Commands\Start;
+use TelegramNotifier\TelegramBot\Commands\Stop;
 use TelegramNotifier\TelegramBot\LongPolling;
 
 if (!defined('ABSPATH')) {
@@ -40,6 +44,9 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
+            $test = new CommandProcessor();
+            $test->addCommands([Start::class, Stop::class]);
+            $test->commandsHandler();
         }
     }
 }
