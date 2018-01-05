@@ -95,7 +95,7 @@ class TelegramDb
     public function resetStatus($chatId)
     {
         global $wpdb;
-        $chat = $chat = $wpdb->update($wpdb->prefix . 'telegram_users', ['status' => 'start'], ['chat_id' => $chatId],
+        $chat = $wpdb->update($wpdb->prefix . 'telegram_users', ['status' => 'start'], ['chat_id' => $chatId],
             ['%s'], ['%s']);
 
         return $chat;
@@ -138,7 +138,7 @@ class TelegramDb
     }
 
     /**
-     * Checing if user is admin
+     * Checking if user is admin
      * @param $chatId
      * @return bool
      */

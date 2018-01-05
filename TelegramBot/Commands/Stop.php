@@ -9,6 +9,8 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramNotifier\ServiceContainer\Loader;
+
 class Stop extends Command
 {
     protected $name = 'stop';
@@ -16,8 +18,11 @@ class Stop extends Command
     public function handle($arguments)
     {
         $client = $this->client;
-        $client->command('stop', function ($message) use ($client) {
-            $client->sendMessage($message->getChat()->getId(), 'Stopped work with bot');
+        $db = Loader::resolve('db');
+        $client->command('stop', function ($message) use ($client, $db) {
+            $db->deleteContact($message->getChat()->getId());
+            $text = 'You have been deleted from bot database. If you want start again, please, send me /start';
+            $client->sendMessage($message->getChat()->getId(), $text);
         });
     }
 }

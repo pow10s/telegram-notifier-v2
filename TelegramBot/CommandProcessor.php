@@ -51,7 +51,7 @@ class CommandProcessor
     protected function processCommands(Update $update)
     {
         $message = $update->getMessage();
-        if ($message !== null) {
+        if ($message !== null && $message->getText()) {
             $this->getCommandBus()->handler($message->getText(), $update);
         }
     }

@@ -38,19 +38,7 @@ class TelegramNotifier
             register_activation_hook(__FILE__, [$db, 'create_table']);
             register_deactivation_hook(__FILE__, [$db, 'delete_table']);
             $bot = new TelegramBot();
-            try {
-                $test = Loader::resolve('commandProcessor');
-                $test->addCommands([
-                    \TelegramNotifier\TelegramBot\Commands\Help::class,
-                    \TelegramNotifier\TelegramBot\Commands\Start::class,
-                    \TelegramNotifier\TelegramBot\Commands\Stop::class,
-                    \TelegramNotifier\TelegramBot\Commands\Search::class,
-                ]);
-                $test->commandsHandler();
-            } catch (\TelegramNotifier\Exception\BotCommandException $e) {
-                echo $e->getMessage();
-            }
-
+            $bot->process();
         }
     }
 }

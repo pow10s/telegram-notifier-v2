@@ -9,6 +9,8 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramNotifier\ServiceContainer\Loader;
+
 class Start extends Command
 {
     protected $name = 'start';
@@ -18,8 +20,12 @@ class Start extends Command
     public function handle($arguments)
     {
         $client = $this->client;
-        $client->command('start', function ($message) use ($client) {
-            $client->sendMessage($message->getChat()->getId(), 'Hello world');
+        $db = Loader::resolve('db');
+        $client->command('start', function ($message) use ($client, $db) {
+            $db->addContact($message->getChat()->getId());
+            $db->resetStatus($message->getChat()->getId());
+            $text = 'Hello, thank`s for subscribing. Commands list: /help';
+            $client->sendMessage($message->getChat()->getId(), $text);
         });
     }
 }
