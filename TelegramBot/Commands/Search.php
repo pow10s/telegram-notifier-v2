@@ -34,10 +34,10 @@ class Search extends Command
             $text = 'Search by: ';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
         });
-        $client->on(function (Update $update) use ($client) {
-            if ($update->getCallbackQuery()->getData() == '/search categories') {
+        $client->on(function (Update $update) use ($client, $arguments) {
+            if ($arguments == 'categories') {
                 $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), 'searching categories');
-            } elseif ($update->getCallbackQuery()->getData() == '/search keyword') {
+            } elseif ($arguments == 'keyword') {
                 $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), 'searching by keywords');
             }
         }, function ($update) {

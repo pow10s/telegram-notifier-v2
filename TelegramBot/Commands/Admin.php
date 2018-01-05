@@ -9,6 +9,7 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramBot\Api\Types\Update;
 use TelegramNotifier\ServiceContainer\Loader;
 use TelegramNotifier\TelegramBot\Commands\Command;
 
@@ -27,7 +28,7 @@ class Admin extends Command
                 $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
                     [
                         [
-                            ['text' => 'Login', 'callback_data' => 'login'],
+                            ['text' => 'Login', 'callback_data' => '/admin login'],
                         ]
                     ]
                 );
@@ -45,6 +46,13 @@ class Admin extends Command
             $db->updateStatus($message->getChat()->getId(), 'admin');
             $text = 'Welcome, ' . $message->getChat()->getFirstName() . ' ' . $message->getChat()->getLastName() . '  you are in admin panel.';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
+        });
+        $client->on(function (Update $update) use ($client, $arguments) {
+            if ($arguments == 'login') {
+                $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), 'login funct');
+            }
+        }, function ($update) {
+            return true;
         });
     }
 }
