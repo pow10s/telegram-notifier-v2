@@ -9,11 +9,15 @@
 namespace TelegramNotifier\TelegramBot;
 
 
+use TelegramBot\Api\Exception;
 use TelegramBot\Api\Types\Update;
 use TelegramNotifier\TelegramBot\Commands\CommandBus;
 
 class CommandProcessor
 {
+    /**Telegram Bot Api
+     * @var \TelegramBot\Api\Client $client
+     */
     protected $client;
 
     /**
@@ -46,13 +50,16 @@ class CommandProcessor
 
     /**
      * @param Update $update
-     *
+     * @throws \Exception
      */
     protected function processCommands(Update $update)
     {
         $message = $update->getMessage();
+        $callbackQuery = $update->getCallbackQuery();
         if ($message !== null && $message->getText()) {
             $this->getCommandBus()->handler($message->getText(), $update);
+        } elseif ($callbackQuery !== null && $update->getCallbackQuery()) {
+            $this->getCommandBus()->handler($callbackQuery->getData(), $update);
         }
     }
 
@@ -71,8 +78,6 @@ class CommandProcessor
             }
             $this->client->handle($updates);
             $updates = $this->client->getUpdates($this->offset, 60);
-        } else {
-            $this->client->run();
         }
     }
 

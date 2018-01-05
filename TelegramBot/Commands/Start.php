@@ -27,5 +27,6 @@ class Start extends Command
             $text = 'Hello, thank`s for subscribing. Commands list: /help';
             $client->sendMessage($message->getChat()->getId(), $text);
         });
+        print_r($arguments);
     }
 }

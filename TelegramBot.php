@@ -7,19 +7,18 @@ use TelegramNotifier\ServiceContainer\Loader;
 
 class TelegramBot
 {
-    protected $helper;
-
     public function __construct()
     {
-        $this->helper = Loader::resolve('helper');
-        add_action('draft_to_publish', [$this, 'send_post_to_telegram_users']);
+        add_action('draft_to_publish', [$this, 'sendPostToTelegram']);
     }
 
-    public function send_post_to_telegram_users()
+    /**
+     * Notify when post created subscribed telegram bot user
+     */
+    public function sendPostToTelegram()
     {
         try {
-            $db = Loader::resolve('db');
-            $chats = $db->chatAll();
+            $chats = Loader::resolve('db')->chatAll();
             $recent_post = wp_get_recent_posts(['numberposts' => 1]);
             foreach ($chats as $id) {
                 foreach ($recent_post as $post) {
@@ -30,7 +29,8 @@ class TelegramBot
                             ]
                         ]
                     );
-                    $text = $this->helper->generate_telegram_post(get_permalink($post['ID']), $post['post_title'],
+                    $text = Loader::resolve('helper')->generate_telegram_post(get_permalink($post['ID']),
+                        $post['post_title'],
                         $post['post_content']);
                     $bot = Loader::resolve('botApi');
                     $bot->sendMessage($id->chat_id, $text, 'html', false, null, $keyboard);
@@ -41,6 +41,9 @@ class TelegramBot
         }
     }
 
+    /**
+     * Processing bot commands
+     */
     public function process()
     {
         try {
@@ -52,7 +55,7 @@ class TelegramBot
                 \TelegramNotifier\TelegramBot\Commands\Stop::class,
                 \TelegramNotifier\TelegramBot\Commands\Search::class,
             ]);
-            if ($this->helper->isOptionExist($options, 'admin_enabled') && $options['admin_enabled']) {
+            if (Loader::resolve('helper')->isOptionExist($options, 'admin_enabled') && $options['admin_enabled']) {
                 $commandProcessor->addCommand(\TelegramNotifier\TelegramBot\Commands\Admin::class);
             }
             $commandProcessor->commandsHandler();
