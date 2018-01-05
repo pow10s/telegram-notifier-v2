@@ -47,9 +47,11 @@ class Admin extends Command
             $text = 'Welcome, ' . $message->getChat()->getFirstName() . ' ' . $message->getChat()->getLastName() . '  you are in admin panel.';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
         });
-        $client->on(function (Update $update) use ($client, $arguments) {
+        $client->on(function (Update $update) use ($client, $arguments, $db) {
             if ($arguments == 'login') {
-                $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), 'login funct');
+                $db->updateStatus($update->getCallbackQuery()->getFrom()->getId(), 'admin-verif');
+                $text = 'Insert <b>verification code</b> from your site: ';
+                $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), $text, 'html');
             }
         }, function ($update) {
             return true;
