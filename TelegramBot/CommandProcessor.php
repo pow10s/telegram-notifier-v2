@@ -78,6 +78,8 @@ class CommandProcessor
             }
             $this->client->handle($updates);
             $updates = $this->client->getUpdates($this->offset, 60);
+        } else {
+            $this->client->run();
         }
     }
 

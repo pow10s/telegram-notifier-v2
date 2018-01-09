@@ -58,7 +58,8 @@ class TelegramBot
             if (Loader::resolve('helper')->isOptionExist($options, 'admin_enabled') && $options['admin_enabled']) {
                 $commandProcessor->addCommand(\TelegramNotifier\TelegramBot\Commands\Admin::class);
             }
-            $commandProcessor->commandsHandler();
+            $pollingMethod = Loader::resolve('helper')->ifNotLocalhostAndSslEnabled();
+            $commandProcessor->commandsHandler($pollingMethod);
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

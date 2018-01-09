@@ -9,6 +9,7 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramBot\Api\Types\Message;
 use TelegramBot\Api\Types\Update;
 use TelegramNotifier\ServiceContainer\Loader;
 use TelegramNotifier\TelegramBot\Commands\Command;
@@ -23,7 +24,7 @@ class Admin extends Command
     {
         $client = $this->client;
         $db = Loader::resolve('db');
-        $client->command('admin', function ($message) use ($client, $db) {
+        $client->command('admin', function (Message $message) use ($client, $db) {
             if (!$db->isAdmin($message->getChat()->getId())) {
                 $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
                     [
@@ -53,7 +54,7 @@ class Admin extends Command
                 $text = 'Insert <b>verification code</b> from your site: ';
                 $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), $text, 'html');
             }
-        }, function ($update) {
+        }, function (Update $update) {
             return true;
         });
     }
