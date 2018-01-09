@@ -16,7 +16,7 @@ class Search extends Command
 {
     protected $name = 'search';
 
-    protected $description = 'Search command';
+    protected $description = 'Search posts';
 
     public function handle($arguments)
     {

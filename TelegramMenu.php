@@ -68,7 +68,7 @@ class TelegramMenu
             }
         } else {
             echo '<div class="notice notice-error is-dismissible">
-                     <p>' . __('Warning: You must provide BOT_TOKEN') . '</p>
+                     <p>' . __('Warning: You must provide <b>BOT_TOKEN</b>') . '</p>
                      </div>';
         }
         ?>

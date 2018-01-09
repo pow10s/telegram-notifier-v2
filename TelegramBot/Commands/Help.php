@@ -9,9 +9,13 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramNotifier\ServiceContainer\Loader;
+
 class Help extends Command
 {
     protected $name = 'help';
+
+    protected $description = 'Show command`s list';
 
     public function handle($arguments)
     {

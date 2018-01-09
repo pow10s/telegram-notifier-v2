@@ -9,6 +9,8 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramBot\Api\Types\CallbackQuery;
+use TelegramBot\Api\Types\Inline\QueryResult\Photo;
 use TelegramBot\Api\Types\Message;
 use TelegramBot\Api\Types\Update;
 use TelegramNotifier\ServiceContainer\Loader;
@@ -37,25 +39,22 @@ class Admin extends Command
                 $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
                     [
                         [
-                            ['text' => 'Create Post', 'callback_data' => 'post-create'],
-                            ['text' => 'Delete Post', 'callback_data' => 'post-delete'],
-                            ['text' => 'User statistic', 'callback_data' => 'statistic'],
+                            ['text' => 'Create Post', 'callback_data' => '/admin post-create'],
+                            ['text' => 'Delete Post', 'callback_data' => '/admin post-delete'],
+                            ['text' => 'User statistic', 'callback_data' => '/admin statistic'],
                         ]
                     ]
                 );
             }
-            $db->updateStatus($message->getChat()->getId(), 'admin');
-            $text = 'Welcome, ' . $message->getChat()->getFirstName() . ' ' . $message->getChat()->getLastName() . '  you are in admin panel.';
+            $text = 'Welcome, ' . $message->getChat()->getFirstName() . ' ' . $message->getChat()->getLastName() . ', you are in admin panel.';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
         });
-        $client->on(function (Update $update) use ($client, $arguments, $db) {
+        $client->callbackQuery(function (CallbackQuery $callbackQuery) use ($client, $arguments) {
+            $callbackId = $callbackQuery->getFrom()->getId();
             if ($arguments == 'login') {
-                $db->updateStatus($update->getCallbackQuery()->getFrom()->getId(), 'admin-verif');
                 $text = 'Insert <b>verification code</b> from your site: ';
-                $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), $text, 'html');
+                $client->sendMessage($callbackId, $text, 'html');
             }
-        }, function (Update $update) {
-            return true;
         });
     }
 }

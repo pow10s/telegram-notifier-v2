@@ -15,6 +15,8 @@ class Stop extends Command
 {
     protected $name = 'stop';
 
+    protected $description = 'Stop work with bot';
+
     public function handle($arguments)
     {
         $client = $this->client;

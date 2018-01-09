@@ -36,13 +36,12 @@ class CommandBus
         return $this->commands;
     }
 
-    public function addCommands(array $commands)
-    {
-        foreach ($commands as $command) {
-            $this->addCommand($command);
-        }
-    }
-
+    /**
+     * @param $command
+     * @return $this
+     * @throws BotCommandException
+     * @throws \Exception
+     */
     public function addCommand($command)
     {
         if (!is_object($command)) {
@@ -64,6 +63,13 @@ class CommandBus
         }
         throw new BotCommandException('Command class should be an instance of "TelegramNotifier\TelegramBot\CommandInterface"');
 
+    }
+
+    public function addCommands(array $commands)
+    {
+        foreach ($commands as $command) {
+            $this->addCommand($command);
+        }
     }
 
     public function removeCommand($name)

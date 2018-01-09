@@ -10,6 +10,7 @@ namespace TelegramNotifier\TelegramBot;
 
 
 use TelegramBot\Api\Exception;
+use TelegramBot\Api\Types\Inline\QueryResult\Photo;
 use TelegramBot\Api\Types\Update;
 use TelegramNotifier\TelegramBot\Commands\CommandBus;
 
@@ -58,7 +59,7 @@ class CommandProcessor
         $callbackQuery = $update->getCallbackQuery();
         if ($message !== null && $message->getText()) {
             $this->getCommandBus()->handler($message->getText(), $update);
-        } elseif ($callbackQuery !== null && $update->getCallbackQuery()) {
+        } elseif ($callbackQuery !== null && $callbackQuery->getData()) {
             $this->getCommandBus()->handler($callbackQuery->getData(), $update);
         }
     }
