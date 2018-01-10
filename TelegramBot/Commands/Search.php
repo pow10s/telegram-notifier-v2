@@ -33,7 +33,7 @@ class Search extends Command
                     ]
                 ]
             );
-            $db->updateStatus($message->getChat()->getId(), 'search-keyword');
+            $db->updateStatus($message->getChat()->getId(), 'search');
             $text = 'Search by: ';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
         });

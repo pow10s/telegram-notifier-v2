@@ -9,6 +9,7 @@ class TelegramBot
 {
     public function __construct()
     {
+        add_action('init', [$this, 'process']);
         add_action('draft_to_publish', [$this, 'sendPostToTelegram']);
     }
 
@@ -55,6 +56,7 @@ class TelegramBot
                 \TelegramNotifier\TelegramBot\Commands\Start::class,
                 \TelegramNotifier\TelegramBot\Commands\Stop::class,
                 \TelegramNotifier\TelegramBot\Commands\Search::class,
+                \TelegramNotifier\TelegramBot\Commands\Cancel::class
             ]);
             if (Loader::resolve('helper')->isOptionExist($options, 'admin_enabled') && $options['admin_enabled']) {
                 $commandProcessor->addCommand(\TelegramNotifier\TelegramBot\Commands\Admin::class);

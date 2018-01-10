@@ -69,7 +69,20 @@ class IncomingMessages extends Command
                         ];
                         $text = 'You are awesome! <b>Post was created</b>';
                         $client->sendMessage($chat_id, $text, 'html');
-                        //$newPost = wp_insert_post($postData);
+                        $newPost = wp_insert_post($postData);
+                        foreach ($db->chatAll() as $id) {
+                            $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
+                                [
+                                    [
+                                        ['text' => 'Show at the site', 'url' => get_permalink($newPost)]
+                                    ]
+                                ]
+                            );
+                            $text = $helper->generate_telegram_post(get_permalink($newPost),
+                                $postData['post_title'], $postData['post_content']);
+                            $client->sendMessage($id->chat_id, $text, 'html', false, null, $keyboard);
+                        }
+                        $db->updateStatus($chat_id, 'start');
                     } else {
                         $text = 'Incorrect delimiter, please re-type <b>data( example - TITLE :: BODY)</b>';
                         $client->sendMessage($chat_id, $text, 'html');
@@ -79,7 +92,7 @@ class IncomingMessages extends Command
                     $text = 'I don`t understand you. Type /help for commands list.';
                     break;
             }
-            $client->sendMessage($chat_id, $text);
+            //$client->sendMessage($chat_id, $text, 'html');
         }, function (Update $update) {
             return true;
         });
