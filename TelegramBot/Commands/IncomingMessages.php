@@ -90,6 +90,7 @@ class IncomingMessages extends Command
                     break;
                 default:
                     $text = 'I don`t understand you. Type /help for commands list.';
+                    $client->sendMessage($chat_id, $text, 'html');
                     break;
             }
             //$client->sendMessage($chat_id, $text, 'html');
