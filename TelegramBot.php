@@ -1,7 +1,7 @@
 <?php
 
-
 namespace TelegramNotifier;
+
 
 use TelegramNotifier\ServiceContainer\Loader;
 
@@ -13,7 +13,7 @@ class TelegramBot
     }
 
     /**
-     * Notify when post created subscribed telegram bot user
+     * Notify subscribed telegram bot user when post created
      */
     public function sendPostToTelegram()
     {
@@ -50,6 +50,7 @@ class TelegramBot
             $options = get_option('telegram_bot_options');
             $commandProcessor = Loader::resolve('commandProcessor');
             $commandProcessor->addCommands([
+                \TelegramNotifier\TelegramBot\Commands\IncomingMessages::class,
                 \TelegramNotifier\TelegramBot\Commands\Help::class,
                 \TelegramNotifier\TelegramBot\Commands\Start::class,
                 \TelegramNotifier\TelegramBot\Commands\Stop::class,

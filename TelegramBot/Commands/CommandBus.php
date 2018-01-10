@@ -93,6 +93,9 @@ class CommandBus
             $command = $match[1];
             $arguments = $match[3];
             $this->execute($command, $arguments, $update);
+        } else {
+            $this->execute($message, null, $update);
+
         }
         return $update;
     }
@@ -101,8 +104,9 @@ class CommandBus
     {
         if (array_key_exists($name, $this->commands)) {
             return $this->commands[$name]->make($this->client, $arguments, $message);
+        } else {
+            return $this->commands['incomingMessages']->make($this->client, null, $message);
         }
-        return 'Ok';
     }
 
     public function parseCommand($text)

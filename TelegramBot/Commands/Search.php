@@ -9,6 +9,7 @@
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
+use TelegramBot\Api\Types\CallbackQuery;
 use TelegramBot\Api\Types\Update;
 use TelegramNotifier\ServiceContainer\Loader;
 
@@ -21,7 +22,9 @@ class Search extends Command
     public function handle($arguments)
     {
         $client = $this->client;
-        $client->command('search', function ($message) use ($client) {
+        $helper = Loader::resolve('helper');
+        $db = Loader::resolve('db');
+        $client->command('search', function ($message) use ($client, $db) {
             $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
                 [
                     [
@@ -30,18 +33,31 @@ class Search extends Command
                     ]
                 ]
             );
-            Loader::resolve('db')->updateStatus($message->getChat()->getId(), 'search-keyword');
+            $db->updateStatus($message->getChat()->getId(), 'search-keyword');
             $text = 'Search by: ';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
         });
-        $client->on(function (Update $update) use ($client, $arguments) {
-            if ($arguments == 'categories') {
-                $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), 'searching categories');
-            } elseif ($arguments == 'keyword') {
-                $client->sendMessage($update->getCallbackQuery()->getFrom()->getId(), 'searching by keywords');
+        $client->callbackQuery(function (CallbackQuery $callbackQuery) use ($client, $arguments, $helper, $db) {
+            $callbackId = $callbackQuery->getFrom()->getId();
+            switch ($arguments) {
+                case 'categories':
+                    if ($helper->get_categories_buttons_list()) {
+                        $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($helper->get_categories_buttons_list());
+                        $db->updateStatus($callbackId, 'search-categories');
+                        $text = 'List of categories: ';
+                        $client->sendMessage($callbackId, $text, null, false, null, $keyboard);
+                    } else {
+                        $db->resetStatus($callbackId);
+                        $text = 'At that moment you haven`t created categories ';
+                        $client->sendMessage($callbackId, $text, null, false, null, null);
+                    }
+                    break;
+                case 'keyword':
+                    $db->updateStatus($callbackId, 'search-keyword');
+                    $text = 'Please, type <b>keyword</b> and you will get list of posts:';
+                    $client->sendMessage($callbackId, $text, 'html');
+                    break;
             }
-        }, function ($update) {
-            return true;
         });
     }
 }

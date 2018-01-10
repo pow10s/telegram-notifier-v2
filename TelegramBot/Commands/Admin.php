@@ -1,18 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: stosdima
- * Date: 05.01.18
- * Time: 10:10
- */
 
 namespace TelegramNotifier\TelegramBot\Commands;
 
 
 use TelegramBot\Api\Types\CallbackQuery;
-use TelegramBot\Api\Types\Inline\QueryResult\Photo;
 use TelegramBot\Api\Types\Message;
-use TelegramBot\Api\Types\Update;
 use TelegramNotifier\ServiceContainer\Loader;
 use TelegramNotifier\TelegramBot\Commands\Command;
 
@@ -25,6 +17,7 @@ class Admin extends Command
     public function handle($arguments)
     {
         $client = $this->client;
+        $helper = Loader::resolve('helper');
         $db = Loader::resolve('db');
         $client->command('admin', function (Message $message) use ($client, $db) {
             if (!$db->isAdmin($message->getChat()->getId())) {
@@ -49,12 +42,45 @@ class Admin extends Command
             $text = 'Welcome, ' . $message->getChat()->getFirstName() . ' ' . $message->getChat()->getLastName() . ', you are in admin panel.';
             $client->sendMessage($message->getChat()->getId(), $text, null, false, null, $keyboard);
         });
-        $client->callbackQuery(function (CallbackQuery $callbackQuery) use ($client, $arguments) {
+        $client->callbackQuery(function (CallbackQuery $callbackQuery) use ($client, $arguments, $db, $helper) {
             $callbackId = $callbackQuery->getFrom()->getId();
-            if ($arguments == 'login') {
-                $text = 'Insert <b>verification code</b> from your site: ';
-                $client->sendMessage($callbackId, $text, 'html');
+            switch ($arguments) {
+                case 'login':
+                    if (!$db->isAdmin($callbackQuery->getMessage()->getChat()->getId())) {
+                        $text = 'Insert <b>verification code</b> from your site: ';
+                        $db->updateStatus($callbackId, 'admin-verif');
+                    } else {
+                        $text = 'You already logged in. Thanks!';
+                        $db->resetStatus($callbackId);
+
+                    }
+                    break;
+                case 'post-create':
+                    $text = 'Send me, please, your <b>post data</b>( example - TITLE :: BODY): ';
+                    $db->updateStatus($callbackId, 'admin-post');
+                    break;
+                case 'post-delete':
+                    $posts = get_posts(['numberposts' => 0]);
+                    $text = 'Please choose post ID which you want to delete from list below: ' . "\n";
+                    if ($posts) {
+                        foreach ($posts as $post) {
+                            $text .= $helper->generate_telegram_post(get_permalink($post),
+                                    $post->post_title,
+                                    'ID -> ' . $post->ID) . "\n";
+                        }
+                        $db->updateStatus($callbackId, 'admin-post-delete');
+                    } else {
+                        $db->resetStatus($callbackId);
+                        $text = 'You havent created posts :(';
+                    }
+                    break;
+                case 'statistic':
+                    $db->resetStatus($callbackId);
+                    $allusers = count($db->chatAll());
+                    $text = 'Current users: ' . $allusers;
+                    break;
             }
+            $client->sendMessage($callbackId, $text, 'html');
         });
     }
 }

@@ -121,7 +121,9 @@ class TelegramDb
     {
         global $wpdb;
         $chats = $wpdb->get_results("SELECT * FROM wp_telegram_users WHERE chat_id = $chatId");
-        return $chats;
+        foreach ($chats as $chat) {
+            return $chat->status;
+        }
     }
 
     /**
@@ -160,7 +162,7 @@ class TelegramDb
      */
     public function searchByKeyword($keyword)
     {
-        $query = new WP_Query(['s' => $keyword]);
+        $query = new \WP_Query(['s' => $keyword]);
         return $query->get_posts();
     }
 }
