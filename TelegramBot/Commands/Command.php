@@ -10,6 +10,7 @@ namespace TelegramNotifier\TelegramBot\Commands;
 
 
 use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup;
+use TelegramNotifier\TelegramBot\CommandProcessor;
 use TelegramNotifier\TelegramBot\Commands\CommandInterface;
 
 abstract class Command implements CommandInterface

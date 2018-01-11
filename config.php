@@ -11,7 +11,17 @@ use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Client;
 
 $options = get_option('telegram_bot_options');
-$token = $options['bot_token'];
+if (isset($options)) {
+    if (array_key_exists('bot_token', $options)) {
+        define('BOT_TOKEN', $options['bot_token']);
+    }
+    if (array_key_exists('admin_enabled', $options)) {
+        define('TELEGRAM_ADMIN_PANEL_ENABLED', $options['admin_enabled']);
+    }
+    if (array_key_exists('verif_code', $options)) {
+        define('TELEGRAM_VERIFICATION_CODE', $options['verif_code']);
+    }
+}
 
 Loader::register('db', function () {
     return new TelegramDb();
@@ -19,12 +29,9 @@ Loader::register('db', function () {
 Loader::register('helper', function () {
     return new Helper();
 });
-Loader::register('clientApi', function () use ($token) {
-    return new Client($token);
+Loader::register('botApi', function () {
+    return new BotApi(BOT_TOKEN);
 });
-Loader::register('botApi', function () use ($token) {
-    return new BotApi($token);
-});
-Loader::register('commandProcessor', function () use ($token) {
-    return new CommandProcessor(new Client($token));
+Loader::register('commandProcessor', function () {
+    return new CommandProcessor(new Client(BOT_TOKEN));
 });

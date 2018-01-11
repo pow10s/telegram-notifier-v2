@@ -24,7 +24,7 @@ class Cancel extends Command
         $db = Loader::resolve('db');
         $client->command('cancel', function (Message $message) use ($client, $db) {
             $db->resetStatus($message->getChat()->getId());
-            $text = 'Cancelled current action';
+            $text = 'Current action cancelled';
             $client->sendMessage($message->getChat()->getId(), $text);
         });
     }

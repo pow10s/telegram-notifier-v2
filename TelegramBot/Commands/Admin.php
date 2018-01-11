@@ -46,14 +46,10 @@ class Admin extends Command
             $callbackId = $callbackQuery->getFrom()->getId();
             switch ($arguments) {
                 case 'login':
-                    if (!$db->isAdmin($callbackQuery->getMessage()->getChat()->getId())) {
-                        $text = 'Insert <b>verification code</b> from your site: ';
-                        $db->updateStatus($callbackId, 'admin-verif');
-                    } else {
-                        $text = 'You already logged in. Thanks!';
-                        $db->resetStatus($callbackId);
-
-                    }
+                    $text = 'Insert <b>verification code</b> from your site: ';
+                    $db->updateStatus($callbackId, 'admin-verif');
+                    $client->editMessageReplyMarkup($callbackQuery->getMessage()->getChat()->getId(),
+                        $callbackQuery->getMessage()->getMessageId());
                     break;
                 case 'post-create':
                     $text = 'Send me, please, your <b>post data</b>( example - TITLE :: BODY): ';
@@ -81,6 +77,7 @@ class Admin extends Command
                     break;
             }
             $client->sendMessage($callbackId, $text, 'html');
+            $client->answerCallbackQuery($callbackQuery->getId());
         });
     }
 }

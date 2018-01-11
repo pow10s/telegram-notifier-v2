@@ -16,32 +16,41 @@ class IncomingMessages extends Command
 {
     protected $name = 'incomingMessages';
 
+    protected $description = 'Handling incoming messages';
+
     public function handle($arguments)
     {
         $client = $this->client;
-        $options = get_option('telegram_bot_options');
         $db = Loader::resolve('db');
         $helper = Loader::resolve('helper');
-        $client->on(function (Update $update) use ($client, $db, $helper, $options) {
+        $client->on(function (Update $update) use ($client, $db, $helper) {
             $chat_id = $update->getMessage()->getChat()->getId();
             $userText = $update->getMessage()->getText();
             $userStatus = $db->getStatus($chat_id);
             switch ($userStatus) {
                 case 'admin-verif':
-                    if ($options['verif_code'] == $userText) {
+                    if (TELEGRAM_VERIFICATION_CODE == $userText) {
                         $text = 'You are logged in. Thanks!';
                         $db->updateAdmin($chat_id);
                         $db->resetStatus($chat_id);
+                        $client->sendMessage($chat_id, $text, 'html');
+
                     } else {
                         $text = 'Incorrect verification code. Please re-type: ';
+                        $client->sendMessage($chat_id, $text, 'html');
+
                     }
                     break;
                 case 'admin-post-delete':
                     if (wp_delete_post($userText)) {
                         $text = 'Post was deleted.';
                         $db->resetStatus($chat_id);
+                        $client->sendMessage($chat_id, $text, 'html');
+
                     } else {
                         $text = 'Error. Please re-type Post ID:';
+                        $client->sendMessage($chat_id, $text, 'html');
+
                     }
                     break;
                 case 'search-keyword':
@@ -53,9 +62,13 @@ class IncomingMessages extends Command
                                     $post->post_title, $post->post_content) . "\n";
                         }
                         $db->resetStatus($chat_id);
+                        $client->sendMessage($chat_id, $text, 'html');
+
                     } else {
                         $text = 'The search did not give a result.';
                         $db->resetStatus($chat_id);
+                        $client->sendMessage($chat_id, $text, 'html');
+
                     }
                     break;
                 case 'admin-post':
@@ -69,6 +82,7 @@ class IncomingMessages extends Command
                         ];
                         $text = 'You are awesome! <b>Post was created</b>';
                         $client->sendMessage($chat_id, $text, 'html');
+
                         $newPost = wp_insert_post($postData);
                         foreach ($db->chatAll() as $id) {
                             $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup(
@@ -86,6 +100,7 @@ class IncomingMessages extends Command
                     } else {
                         $text = 'Incorrect delimiter, please re-type <b>data( example - TITLE :: BODY)</b>';
                         $client->sendMessage($chat_id, $text, 'html');
+
                     }
                     break;
                 default:
@@ -93,7 +108,6 @@ class IncomingMessages extends Command
                     $client->sendMessage($chat_id, $text, 'html');
                     break;
             }
-            //$client->sendMessage($chat_id, $text, 'html');
         }, function (Update $update) {
             return true;
         });

@@ -19,7 +19,7 @@ class CommandBus
     /** List of commands
      * @var array $commands
      */
-    protected $commands = [];
+    public $commands = [];
 
     /** Api
      * @var \TelegramBot\Api\Client $client
@@ -29,11 +29,6 @@ class CommandBus
     public function __construct(\TelegramBot\Api\Client $client)
     {
         $this->client = $client;
-    }
-
-    public function getCommands()
-    {
-        return $this->commands;
     }
 
     /**

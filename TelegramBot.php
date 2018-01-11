@@ -9,8 +9,15 @@ class TelegramBot
 {
     public function __construct()
     {
-        add_action('init', [$this, 'process']);
         add_action('draft_to_publish', [$this, 'sendPostToTelegram']);
+        if (Loader::resolve('helper')->ifNotLocalhostAndSslEnabled()) {
+            if (isset($_POST['webhook_enabled'])) {
+                add_action('init', [$this, 'setWebhook']);
+            } elseif (isset($_POST['webhook_disabled'])) {
+                add_action('init', [$this, 'unsetWebhook']);
+            }
+        }
+        add_action('init', [$this, 'process']);
     }
 
     /**
@@ -48,7 +55,6 @@ class TelegramBot
     public function process()
     {
         try {
-            $options = get_option('telegram_bot_options');
             $commandProcessor = Loader::resolve('commandProcessor');
             $commandProcessor->addCommands([
                 \TelegramNotifier\TelegramBot\Commands\IncomingMessages::class,
@@ -58,7 +64,7 @@ class TelegramBot
                 \TelegramNotifier\TelegramBot\Commands\Search::class,
                 \TelegramNotifier\TelegramBot\Commands\Cancel::class
             ]);
-            if (Loader::resolve('helper')->isOptionExist($options, 'admin_enabled') && $options['admin_enabled']) {
+            if (defined('TELEGRAM_ADMIN_PANEL_ENABLED') && TELEGRAM_ADMIN_PANEL_ENABLED) {
                 $commandProcessor->addCommand(\TelegramNotifier\TelegramBot\Commands\Admin::class);
             }
             $pollingMethod = Loader::resolve('helper')->ifNotLocalhostAndSslEnabled();
@@ -68,4 +74,20 @@ class TelegramBot
         }
     }
 
+    protected function setWebhook()
+    {
+        if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'telegram-settings') {
+            $bot = Loader::resolve('botApi');
+            $pluginUrl = plugins_url('telegram-notifier-v2/TelegramNotifier.php');
+            $bot->setWebhook($pluginUrl);
+        }
+    }
+
+    protected function unsetWebhook()
+    {
+        if (isset($_REQUEST['page']) && $_REQUEST['page'] == 'telegram-settings') {
+            $bot = Loader::resolve('botApi');
+            $bot->setWebhook('');
+        }
+    }
 }

@@ -52,7 +52,7 @@ class TelegramMenu
     public function create_admin_page()
     {
         $this->options = get_option('telegram_bot_options');
-        if ($this->helper->isOptionExist($this->options, 'bot_token')) {
+        if (defined('BOT_TOKEN')) {
             if (!$this->helper->ifNotLocalhostAndSslEnabled()) {
                 echo '<div class="notice notice-error is-dismissible">
                      <p>' . __('Warning: the WebHooks is not working while you are in a localhost environment or SSL not active.') . '</p>

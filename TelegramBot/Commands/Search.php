@@ -41,8 +41,8 @@ class Search extends Command
             $callbackId = $callbackQuery->getFrom()->getId();
             switch ($arguments) {
                 case 'categories':
-                    if ($helper->get_categories_buttons_list()) {
-                        $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($helper->get_categories_buttons_list());
+                    if ($helper->get_categories_buttons_list('/search')) {
+                        $keyboard = new \TelegramBot\Api\Types\Inline\InlineKeyboardMarkup($helper->get_categories_buttons_list('/search'));
                         $db->updateStatus($callbackId, 'search-categories');
                         $text = 'List of categories: ';
                         $client->sendMessage($callbackId, $text, null, false, null, $keyboard);
@@ -58,6 +58,23 @@ class Search extends Command
                     $client->sendMessage($callbackId, $text, 'html');
                     break;
             }
+            foreach (get_categories() as $category) {
+                if ($arguments == $category->term_id) {
+                    $posts = get_posts(['category' => $category->term_id]);
+                    $text = '';
+                    if ($posts) {
+                        foreach ($posts as $post) {
+                            $text .= $helper->generate_telegram_post(get_permalink($post->ID), $post->post_title, $post->post_content) . "\n";
+                        }
+                        $db->resetStatus($callbackId);
+                        $client->sendMessage($callbackId, $text, 'html');
+                    } else {
+                        $text = 'There are no posts in this category';
+                        $client->sendMessage($callbackId, $text);
+                    }
+                }
+            }
+            $client->answerCallbackQuery($callbackQuery->getId());
         });
     }
 }

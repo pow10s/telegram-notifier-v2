@@ -21,7 +21,7 @@ class Help extends Command
     {
         $client = $this->client;
         $client->command('help', function ($message) use ($client) {
-            $client->sendMessage($message->getChat()->getId(), 'Commands list');
+            $client->sendMessage($message->getChat()->getId(), 'Commands list: ');
         });
     }
 }

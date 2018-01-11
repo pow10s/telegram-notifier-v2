@@ -70,16 +70,16 @@ class CommandProcessor
      */
     public function commandsHandler($webhook = false)
     {
+        $this->offset = 0;
+        $updates = $this->client->getUpdates($this->offset, 60);
+        foreach ($updates as $update) {
+            $this->offset = $updates[count($updates) - 1]->getUpdateId() + 1;
+            $this->processCommands($update);
+        }
         if (!$webhook) {
-            $this->offset = 0;
-            $updates = $this->client->getUpdates($this->offset, 60);
-            foreach ($updates as $update) {
-                $this->offset = $updates[count($updates) - 1]->getUpdateId() + 1;
-                $this->processCommands($update);
-            }
             $this->client->handle($updates);
             $updates = $this->client->getUpdates($this->offset, 60);
-        } else {
+        }else {
             $this->client->run();
         }
     }
@@ -101,14 +101,5 @@ class CommandProcessor
     public function addCommands($names)
     {
         $this->getCommandBus()->addCommands($names);
-    }
-
-    /**Getting exists commands
-     * @return array
-     * @throws \Exception
-     */
-    public function getCommands()
-    {
-        return $this->getCommandBus()->getCommands();
     }
 }

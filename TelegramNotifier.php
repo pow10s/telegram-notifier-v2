@@ -32,13 +32,11 @@ class TelegramNotifier
 {
     public function __construct()
     {
-        if (is_admin()) {
-            $db = Loader::resolve('db');
-            $settingsPage = new \TelegramNotifier\TelegramMenu();
-            register_activation_hook(__FILE__, [$db, 'create_table']);
-            register_deactivation_hook(__FILE__, [$db, 'delete_table']);
-            $bot = new TelegramBot();
-        }
+        $db = Loader::resolve('db');
+        $settingsPage = new \TelegramNotifier\TelegramMenu();
+        register_activation_hook(__FILE__, [$db, 'create_table']);
+        register_deactivation_hook(__FILE__, [$db, 'delete_table']);
+        $bot = new TelegramBot();
     }
 }
 

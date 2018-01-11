@@ -12,14 +12,14 @@ class Helper
      * Transform categories list in keyboard for telegram bot
      * @return array|bool $keyboard
      */
-    public function get_categories_buttons_list()
+    public function get_categories_buttons_list($commandName)
     {
         if (get_categories()) {
             $keyboard = [];
             foreach (get_categories() as $category) {
                 $keyboard[] =
                     [
-                        ['text' => $category->name, 'callback_data' => $category->term_id]
+                        ['text' => $category->name, 'callback_data' => $commandName . ' ' . $category->term_id]
                     ];
             }
             return $keyboard;
@@ -75,17 +75,5 @@ class Helper
     {
         $posts = get_posts(['numberposts' => 0]);
         return ($posts) ? $posts : false;
-    }
-
-    /**
-     * Check if wordpress option exists
-     * @param $option
-     * @param $arrayOfOptions
-     * @param $optionName
-     * @return bool
-     */
-    public function isOptionExist($arrayOfOptions, $optionName): bool
-    {
-        return (isset($arrayOfOptions) && array_key_exists($optionName, $arrayOfOptions)) ? true : false;
     }
 }
